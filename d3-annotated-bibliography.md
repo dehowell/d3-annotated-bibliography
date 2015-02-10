@@ -1,0 +1,136 @@
+# D3: An Annotated Bibliography
+
+### Mike Bostock: "Let's Make a Bar Chart"
+
+([link][1])
+
+The canonical D3 tutorial, introducing _selections_, the method-chaining style of the D3 API, using a data join to create elements, mapping data to properties of DOM nodes, and introducing scales to translate between the bounds of your data and the bounds of the elements in the page.
+
+Coming back to this tutorial after having read many other sources, I'm struck by how much of D3's conceptual structure Bostock delivers here. Although, I know that some of it flew right over my head the first time I worked through this example:
+
+> The data operator returns the update selection. The enter and exit selections hang off the update selection, so you can ignore them if you don’t need to add or remove elements.
+
+I found getting used to which selections you need to savee references to and when one of the trickier bits of D3. But Bostock actually explains it pretty clearly:
+
+> Since method chaining can only be used to descend into the document hierarchy, use `var` to keep references to selections and go back up.
+
+It's just that it doesn't stick until you've been confused by a few examples - and start remembering which API methods return a new selection.
+
+### Mike Bostock: "Let's Make a Bar Chart, II"
+
+([link][2])
+
+On to part two, which introduces basic SVG, loading data from external files, and data structured as an array of objects instead of just an array of values. Bostock also introduces the use of a `<g>` tag to wrap multiple visual elements that need to be positioned together. But this is a little bit of a subtle technique, because it involves positioning the group relative to the SVG and then positioning its children _relative to the `<g>` tag_.
+
+In the previous "Let's Make a Bar Chart", Bostock didn't save a reference to the enter selection where he added the `<div>` bars. In the SVG example, he starts with the `<g>` and saves the selection of all these elements, positioned along the y-axis according to their order in the data set.
+
+```javascript
+
+var bar = chart.selectAll("g")
+    .data(data)
+  .enter().append("g")
+    .attr("transform", function(d, i) {
+        return "translate(0," + i * barHeight + ")";
+    });
+```
+
+The `bar` variable now references the selection of `<g>` nodes. Each new chain off this selection can add a new child element to each `<g>`, inheriting the same datum as its parent.
+
+```javascript
+bar.append("rect")
+    .attr("width", x)
+    .attr("height", barHeight - 1);
+
+bar.append("text")
+    .attr("x", function(d) { return x(d) - 3; })
+    .attr("y", barHeight / 2)
+    .attr("dy", ".35em")
+    .text(function(d) { return d; });
+```
+
+### Mike Bostock: "Let's Make a Bar Chart, III"
+
+([link][3])
+
+Part three of the bar chart tutorial introduces **ordinal scales**. In an ordinal scale, the input data set takes one of a discrete set of values. Unless we're mapping an ordinal variable to colors, the geometric parameters of SVG elements need to be numerical. Setting up an ordinal scale is more involved than a linear scale because there are simply more ways you might want to map a single value to a range of numbers.
+
+You can either be completely explicit:
+
+```javascript
+var x = d3.scale.ordinal()
+    .domain(["A", "B", "C", "D", "E", "F"])
+    .range([0, 1, 2, 3, 4, 5]);
+```
+
+Or use `rangeBands` or `rangePoints` to generate the output values for you from a provided range. Bostock describes the differences between these:
+
+> The rangeBands method computes range values so as to divide the chart area into evenly-spaced, evenly-sized bands, as in a bar chart. The similar rangePoints method computes evenly-spaced range values as in a scatterplot.
+
+Each of these methods has a corresponding rounded version, which forces the values to be nearest integers for the sake of pixel-kindness. Using these to try and understand the difference between bands and points:
+
+```javascript
+var data = ["A", "B", "C", "D", "E", "F"],
+	scale = d3.scale.ordinal() .domain(data);
+
+_.map(data, scale.rangeRoundBands([0, 100])  // => [2, 18, 34, 50, 66, 82]
+_.map(data, scale.rangeRoundPoints([0, 100]) // => [0, 20, 40, 60, 80, 100]
+```
+
+
+It really does come down to bands requiring some width, so the range is subdivided into evenly-spaced regions. Points are assumed to not have width, so the start and of the range can themselves be used for positioning data.
+
+Part three also introduces axes, a convention for handling margins, and gives a hat tip to the `ggplot` library for R.
+
+### Mike Bostock: "Margin Convention"
+
+([link][4])
+
+This article lays out convention for adding specifying margins on a D3 graphic that lets you customize them per-side and then mostly ignore margins in subsequent calculations. At least if you're working with SVG lots where you can wrap the entire plot in a `<g>` that handles the margins for you:
+
+```javascript
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+```
+
+### Hadley Wickham: ggplot2 `geom_point` documentation 
+
+([link][5])
+
+Although `ggplot2` is higher level library (and, *I know*, for R and not the web), there's some conceptual similarity between it and D3 that I think can help illuminate the latter. 
+
+The anatomy of a simple scatter plot in ggplot, using R's built-in mtcars sample data set, demonstrates some of the major building blocks:
+
+```r
+ggplot(mtcars) + 						# Bind the mtcars dataset to the chart.
+	geom_point(aes(x = wt, y = mpg))	# Map each element of the dataset to a point, 
+										# using the wt variable for the x position and
+										# the mpg variable for the y position.
+```
+
+There are also pluggable scales in ggplot, although this example is using implicit linear scales.
+
+
+```javascript
+svg.selectAll("circle")
+	.data(mtcars) // Bind the mtcars dataset to the SVG.
+	.enter()
+		.append("circle") // Represent each observation with a point.
+		.attr({
+			cx: function(d) { return x(d.wt); }, // Use the wt variable for the x position.
+			cy: function(d) { return y(d.mpg); } // And the mpg variable for the y.
+		});
+```
+
+ggplot is higher-level here primarily because it encapsulates the visual options in its `geom_*` function, each of which represents a different layer you can add on to the chart. D3 has no such nicety so that you work directly with DOM nodes and SVG nodes.
+
+
+---
+
+[1]: http://bost.ocks.org/mike/bar/ "Let's Make a Bar Chart"
+[2]: http://bost.ocks.org/mike/bar/2/ "Let's Make a Bar Chart, II"
+[3]: http://bost.ocks.org/mike/bar/3/ "Let's Make a Bar Chart, III"
+[4]: http://bl.ocks.org/mbostock/3019563 "Margin Convention"
+[5]: http://docs.ggplot2.org/current/geom_point.html "ggplot2: geom_point documentation"
