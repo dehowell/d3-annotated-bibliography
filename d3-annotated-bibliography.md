@@ -130,11 +130,6 @@ svg.selectAll("circle")
 
 ggplot is higher-level here primarily because it encapsulates the visual options in its `geom_*` function, each of which represents a different layer you can add on to the chart. D3 has no such nicety so that you work directly with DOM nodes and SVG nodes.
 
-### Ari Lerner and Victor Powell. _D3 on AngularJS_
-
-([link][6])
-
-
 
 ---
 
@@ -143,4 +138,3 @@ ggplot is higher-level here primarily because it encapsulates the visual options
 [3]: http://bost.ocks.org/mike/bar/3/ "Let's Make a Bar Chart, III"
 [4]: http://bl.ocks.org/mbostock/3019563 "Margin Convention"
 [5]: http://docs.ggplot2.org/current/geom_point.html "ggplot2: geom_point documentation"
-[6]: https://leanpub.com/d3angularjs "D3 on AngularJS"
