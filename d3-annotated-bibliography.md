@@ -1,5 +1,9 @@
 # D3: An Annotated Bibliography
 
+- [Articles in the D3 queue](https://pinboard.in/u:dehowell/t:d3/unread/)
+
+## References
+
 ### Mike Bostock: "Let's Make a Bar Chart"
 
 ([link][1])
