@@ -14,7 +14,7 @@ Leland Wilkinson, _The Grammar of Graphics_:
 > our package will have no deep structure. Our computer program will be
 > unnecessarily copmlex, because we will fail to reuse objects or routines that
 > function similary in different charts. And we will have no way to add new
-> charts to our system without generating copmlex new code. Elegant design
+> charts to our system without generating complex new code. Elegant design
 > requires us to think about a theory of graphics, not charts.
 
 Although D3 is a bit lower-level than what Wilkinson is describing, I think this
