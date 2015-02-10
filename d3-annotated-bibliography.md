@@ -8,7 +8,7 @@
 
 ([link][1])
 
-The canonical D3 tutorial, introducing _selections_, the method-chaining style of the D3 API, using a data join to create elements, mapping data to properties of DOM nodes, and introducing scales to translate between the bounds of your data and the bounds of the elements in the page.
+The canonical D3 tutorial, introducing selections, the method-chaining style of the D3 API, using a data join to create elements, mapping data to properties of DOM nodes, and introducing scales to translate between the bounds of your data and the bounds of the elements in the page.
 
 Coming back to this tutorial after having read many other sources, I'm struck by how much of D3's conceptual structure Bostock delivers here. Although, I know that some of it flew right over my head the first time I worked through this example:
 
