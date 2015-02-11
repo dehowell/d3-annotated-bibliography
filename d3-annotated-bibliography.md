@@ -130,6 +130,20 @@ svg.selectAll("circle")
 
 ggplot is higher-level here primarily because it encapsulates the visual options in its `geom_*` function, each of which represents a different layer you can add on to the chart. D3 has no such nicety so that you work directly with DOM nodes and SVG nodes.
 
+### Mike Bostock: "General Update Pattern, I"
+
+([link][6])
+
+Bostock explains the different types of selection, using just text elements for a barebones example. D3 binds data to DOM nodes by setting the datum as the `__data__` property of the node. Whenever you call `data(dataset)` on a D3 selection, the provided dataset is matched up with the DOM nodes in the selection. In the example, `text` is the _update selection_.
+
+```javascript
+var text = svg.selectAll("text").data(data);
+```
+
+A DOM node bound to a datum that is also present in the new dataset supplied here is part of this selection. Any elements in `data` that aren't already bound to the DOM go to `text.enter()`. Elements that were bound to a DOM node, but aren't in `data` are returned in the `text.exit()` selection.
+
+
+
 
 ---
 
@@ -138,3 +152,4 @@ ggplot is higher-level here primarily because it encapsulates the visual options
 [3]: http://bost.ocks.org/mike/bar/3/ "Let's Make a Bar Chart, III"
 [4]: http://bl.ocks.org/mbostock/3019563 "Margin Convention"
 [5]: http://docs.ggplot2.org/current/geom_point.html "ggplot2: geom_point documentation"
+[6]: http://bl.ocks.org/mbostock/3808218 "General Update Pattern, I"
