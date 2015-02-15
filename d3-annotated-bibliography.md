@@ -231,6 +231,21 @@ console open to get a better feel.
 Transitions help make the role of the key function clear. Moral of the story: if
 you're going to animate your data, you probably need to use a key function.
 
+### Mike Bostock: "Thinking With Joins"
+
+([link][9])
+
+Discusses the motivation behind the declarative style of D3 (as opposed to
+iterating manually over your data to create and modify DOM elements) as well as
+defining how the join between data and DOM elements translates to the enter,
+update, and exit selections.
+
+The Venn diagram is handy:
+
+- enter: The complement of the DOM elements with respect to the data.
+- exit: The complement of the data with respect to the DOM elements.
+- update:  The intersection of the data with the DOM elements.
+
 ---
 
 [1]: http://bost.ocks.org/mike/bar/ "Let's Make a Bar Chart"
@@ -241,3 +256,4 @@ you're going to animate your data, you probably need to use a key function.
 [6]: http://bl.ocks.org/mbostock/3808218 "General Update Pattern, I"
 [7]: http://bl.ocks.org/mbostock/3808221 "General Update Pattern, II"
 [8]: http://bl.ocks.org/mbostock/3808234 "General Update Pattern, III"
+[9]: http://bost.ocks.org/mike/join/ "Thinking With Joins"
