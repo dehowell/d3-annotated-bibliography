@@ -106,7 +106,7 @@ and understand the difference between bands and points:
 
 ```javascript
 var data = ["A", "B", "C", "D", "E", "F"],
-	scale = d3.scale.ordinal() .domain(data);
+    scale = d3.scale.ordinal() .domain(data);
 
 _.map(data, scale.rangeRoundBands([0, 100])  // => [2, 18, 34, 50, 66, 82]
 _.map(data, scale.rangeRoundPoints([0, 100]) // => [0, 20, 40, 60, 80, 100]
@@ -153,7 +153,7 @@ data set, demonstrates some of the major building blocks:
 ggplot(mtcars) +
 # Map each element of the dataset to a point, using the wt variable for the x
 # position and the mpg variable for the y position.
-	geom_point(aes(x = wt, y = mpg))
+    geom_point(aes(x = wt, y = mpg))
 ```
 
 There are also pluggable scales in ggplot, although this example is using
@@ -163,16 +163,16 @@ implicit linear scales.
 ```javascript
 svg.selectAll("circle")
     // Bind the mtcars dataset to the SVG.
-	.data(mtcars)
-	.enter()
+    .data(mtcars)
+    .enter()
         // Represent each observation with a point.
-		.append("circle")
-		.attr({
+        .append("circle")
+        .attr({
             // Use the wt variable for the x position.
-			cx: function(d) { return x(d.wt); },
+            cx: function(d) { return x(d.wt); },
             // And the mpg variable for the y.
-			cy: function(d) { return y(d.mpg); }
-		});
+            cy: function(d) { return y(d.mpg); }
+        });
 ```
 
 ggplot is higher-level here primarily because it encapsulates the visual options
@@ -246,7 +246,76 @@ The Venn diagram is handy:
 - exit: The complement of the data with respect to the DOM elements.
 - update:  The intersection of the data with the DOM elements.
 
+### Mike Bostock: "Object Constancy"
+
+([link][10])
+
+> Animated transitions are pretty, but they also serve a purpose: they make it
+> easier to follow the data.
+
+Bostock touches briefly on key functions and transitions without much detail,
+but this article is more notable for the discussion of the _design_ resigns for
+animation.
+
+### Mike Bostock: "Histogram"
+
+([link][11])
+
+D3 provides several "layout" object, each of which restructures a data set to
+match the requirements of a particular presentation style. The first of these
+I've tried to wrap my head around is the histogram, which groups a flat data set
+into bins. Although the [documentation][11a] describes the resulting structure,
+I had to see it for myself in the console to wrap my head around what to do with
+the result.
+
+I find adapting D3 examples to my own needs sometimes tricky and Bostock's own
+histogram example has a gotcha in it that I stumbled over. When he sets the
+width of the bars, he uses the x scale to translate it into pixels.
+
+```javascript
+bar.append("rect")
+    .attr("x", 1)
+    .attr("width", x(data[0].dx) - 1)
+    .attr("height", function(d) { return height - y(d.y); });
+```
+
+That makes sense - the `dx` property on the bin is in units of the data set and
+needs to translated into pixels, right? When I tried this out on my own data
+(weight measurements collected from a wireless scale), the width came out as a
+negative number. A *really* negative number. The sample above contains a little
+shortcut - because the domain of the x scale starts at 0, it can be used to
+translate a difference in the data into a difference in pixels. But the domain
+of my weight data started well above zero, so any number less than the lower
+bound on my data (like the width of the bins) therefore comes out negative. My
+solution was to offset the width by the lower end of the domain on the scale
+first:
+
+```javascript
+bar.append("rect")
+    .attr("x", 1)
+    .attr("width", x(data[0].dx + x.domain()[0]) - 1)
+    .attr("height", function(d) { return height - y(d.y); });
+```
+
+Yes, the x coordinate of the bar is a constant. That works here because Bostock
+wraps the bar and a text label in a `<g>` tag and then positions the group.
+Everything within can be relatively positioned.
+
+```javascript
+var bar = svg.selectAll(".bar")
+    .data(data)
+  .enter().append("g")
+    .attr("class", "bar")
+    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+```
+
+
+[11a]: https://github.com/mbostock/d3/wiki/Histogram-Layout#_histogram "Histogram Layout"
+
 ---
+
+David Howell, 2015
+
 
 [1]: http://bost.ocks.org/mike/bar/ "Let's Make a Bar Chart"
 [2]: http://bost.ocks.org/mike/bar/2/ "Let's Make a Bar Chart, II"
@@ -257,3 +326,5 @@ The Venn diagram is handy:
 [7]: http://bl.ocks.org/mbostock/3808221 "General Update Pattern, II"
 [8]: http://bl.ocks.org/mbostock/3808234 "General Update Pattern, III"
 [9]: http://bost.ocks.org/mike/join/ "Thinking With Joins"
+[10]: http://bost.ocks.org/mike/constancy/ "Object Constancy"
+[11]: http://bl.ocks.org/mbostock/3048450 "Histogram"
