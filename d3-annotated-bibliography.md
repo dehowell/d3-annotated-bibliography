@@ -312,6 +312,51 @@ var bar = svg.selectAll(".bar")
 
 [11a]: https://github.com/mbostock/d3/wiki/Histogram-Layout#_histogram "Histogram Layout"
 
+### Mike Bostock: "Towards Reusable Charts"
+
+([link][12])
+
+Bostock describes a simple implementation of a reusable charting function, which
+itself has getter and setter methods for adjusting its configuration. The user
+of the charting function would invoke it something like:
+
+```javascript
+var chart = timeSeriesChart()
+    .x(function(d) { return formatDate.parse(d.date); })
+    .y(function(d) { return +d.price; });
+
+var formatDate = d3.time.format("%b %Y");
+
+// ...
+
+d3.csv("sp500.csv", function(data) {
+  d3.select("#example")
+      .datum(data)
+      .call(chart);
+});
+```
+
+This has the merits of a simple API for the caller, but it still feels a little
+bit "Excel chart wizard" to me. The article itself ends by asking the question:
+
+> We now have a strawman convention for reusable visualization components. Yet
+> there is far more to cover as to what should be considered configuration or
+> even a chart. Is a traditional chart typology the best choice?
+
+My answer is "no". If I wanted traditional chart types, I wouldn't care about D3
+in the first place.
+
+### Ari Lerner and Victor Powell: _D3 on AngularJS_
+
+([link][13])
+
+A substantial chunk of _D3 on AngularJS_ is a review of just D3 on this own, but
+it's a pretty good survey for someone who has gotten past the basics already.
+The advice on integrating with AngularJS seems solid and mostly focuses on
+creating directives for wrapping the business of calling the D3 API, along with
+when to use `$apply` and `$watch` to keep D3 events integreted with updates in
+the AngularJS model.
+
 ---
 
 David Howell, 2015
@@ -328,3 +373,5 @@ David Howell, 2015
 [9]: http://bost.ocks.org/mike/join/ "Thinking With Joins"
 [10]: http://bost.ocks.org/mike/constancy/ "Object Constancy"
 [11]: http://bl.ocks.org/mbostock/3048450 "Histogram"
+[12]: http://bost.ocks.org/mike/chart/ "Towards Reusable Charts"
+[13]: https://leanpub.com/d3angularjs "D3 on AngularJS"
