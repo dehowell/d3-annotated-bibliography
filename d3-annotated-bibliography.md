@@ -192,7 +192,7 @@ The Venn diagram is handy:
 
 > Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data.
 
-Bostock touches briefly on key functions and transitions without much detail, but this article is more notable for the discussion of the _design_ resigns for animation.
+Bostock touches briefly on key functions and transitions without much detail, but this article is more notable for the discussion of the _design_ reasons for animation.
 
 ### Mike Bostock: "Histogram"
 
