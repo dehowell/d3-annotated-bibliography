@@ -198,7 +198,7 @@ Bostock touches briefly on key functions and transitions without much detail, bu
 
 ([link][11])
 
-D3 provides several "layout" object, each of which restructures a data set to match the requirements of a particular presentation style. The first of these I've tried to wrap my head around is the histogram, which groups a flat data set into bins. Although the [documentation][11a] describes the resulting structure, I had to see it for myself in the console to wrap my head around what to do with the result.
+D3 provides several "layout" objects, each of which restructures a data set to match the requirements of a particular presentation style. The first of these I've tried to wrap my head around is the histogram, which groups a flat data set into bins. Although the [documentation][11a] describes the resulting structure, I had to see it for myself in the console to wrap my head around what to do with the result.
 
 I find adapting D3 examples to my own needs sometimes tricky and Bostock's own histogram example has a gotcha in it that I stumbled over. When he sets the width of the bars, he uses the x scale to translate it into pixels.
 
