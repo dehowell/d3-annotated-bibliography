@@ -1,10 +1,7 @@
 D3: An Annotated Bibliography
 =============================
 
-Inspired by [Rob Friesel's][founddrama] [AngularJS annotated bibliography][ng-bib], 
-I am collecting articles, books, etc. on [D3][d3] here, along with my commentary and
-summaries. I am finding D3 to have a steep learning curve, but that no other
-data graphics library for the web compares.
+Inspired by [Rob Friesel's][founddrama] [AngularJS annotated bibliography][ng-bib], I am collecting articles, books, etc. on [D3][d3] here, along with my commentary and summaries. I am finding D3 to have a steep learning curve, but that no other data graphics library for the web compares.
 
 Leland Wilkinson, _The Grammar of Graphics_:
 
